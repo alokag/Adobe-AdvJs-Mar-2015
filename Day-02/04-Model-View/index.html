@@ -13,6 +13,27 @@
             font-weight: bold;
         }
     </style>
+    <script src="jquery-1.11.2.js"></script>
+    <script>
+    String.prototype.toNumber = function(){
+        return parseInt(this,10);
+    }
+    $(function(){
+        $("#btnCalculate").click(function(){
+            var basic = $("#txtBasic").val().toNumber(),
+                hra = $("#txtHra").val().toNumber(),
+                da = $("#txtDa").val().toNumber(),
+                tax = $("#rangeTax").val().toNumber();
+
+            var gross = basic + hra + da;
+            var net = gross * ((100-tax)/100);
+            $("#divResult").html(net);
+        });
+        $("#rangeTax").change(function(){
+            $("#spanTax").text(this.value + '%');
+        });
+    });
+    </script>
 </head>
 <body>
     <h1>Salary Calculator</h1>
