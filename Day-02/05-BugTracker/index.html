@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bug Tracker</title>
+    <style>
+    .closed {
+        font-style: italic;
+        text-decoration: line-through;
+        color : red;
+        font-weight: bold;
+    }
+    </style>
+    <script src="jquery-1.11.2.js"></script>
+    <script>
+    $(function(){
+        $("#btnAdd").click(function(){
+            $("<li>").html($("#txtBug").val()).appendTo($("#olBugList"));
+        });
+        $("#olBugList").on("click","li", function(){
+            $(this).toggleClass("closed");
+        });
+        $("#btnRemoveClosed").click(function(){
+            $("li.closed").remove();
+        });
+    })
+    </script>
+</head>
+<body>
+    <!--
+    Use Cases
+    1. Display a list of bugs
+    2. Add a bug
+    3. Toggle the close status of the bug
+    4. Remove closed bugs
+
+    -->
+    <h1>Bug Tracker</h1>
+    <hr>
+    <label for="">Bug :</label>
+    <input type="text" name="" id="txtBug">
+    <input type="button" value="Add Bug" id="btnAdd">
+    <input type="button" value="Remove Closed" id="btnRemoveClosed">
+    <ol id="olBugList">
+
+    </ol>
+</body>
+</html>
