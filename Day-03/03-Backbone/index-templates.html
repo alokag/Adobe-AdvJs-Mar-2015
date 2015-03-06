@@ -7,6 +7,7 @@
     <script src="jquery.js"></script>
     <script src="underscore.js"></script>
     <script src="backbone.js"></script>
+    <script src="handlebars-v3.0.0.js"></script>
     <script>
     String.prototype.toNumber = function(){
         return parseInt(this,10);
@@ -27,20 +28,15 @@
 
     var SalaryCalculatorView = Backbone.View.extend({
 
+        templateId : '#calculatorTemplate',
 
         initialize : function(){
-             this.updateView = this.updateView.bind(this);
-            this.model.on('change',this.updateView);
-
+            //this.updateView = this.updateView.bind(this);
+            _.bindAll(this, 'render');
+            this.model.on('change',this.render);
+            this.templateFn = Handlebars.compile($(this.templateId).html());
         },
-        updateView : function(){
-            this.$("#txtBasic").val(this.model.get('basic'));
-            this.$("#txtHra").val(this.model.get('hra'));
-            this.$("#txtDa").val(this.model.get('da'));
-            this.$("#rangeTax").val(this.model.get('tax'));
-            this.$("#spanTax").html(this.model.get('tax') + '%');
-            this.$("#divResult").html(this.model.get('salary'));
-        },
+        
         events : {
             'change input' : 'updateModel',
             'click #btnCalculate' : 'triggerCalculate'
@@ -55,7 +51,7 @@
             this.model.calculate();
         },
         render : function(){
-            this.$el.html($("#calculatorTemplate").html());
+            this.$el.html(this.templateFn(this.model.toJSON()));
             return this;
         }
     });
@@ -65,17 +61,19 @@
     <script type="text/template" id="calculatorTemplate">
     <h1>Salary Calculator</h1>
         <hr>
-        <div><label for="">Basic :</label><input type="text" name="" id="txtBasic"></div>
-        <div><label for="">HRA :</label><input type="text" name="" id="txtHra"></div>
-        <div><label for="">DA :</label><input type="text" name="" id="txtDa"></div>
+        <div>
+        <label for="">Basic :</label>
+        <input type="text" name="" id="txtBasic" value='{{basic}}'></div>
+        <div><label for="">HRA :</label><input type="text" name="" id="txtHra" value='{{hra}}'></div>
+        <div><label for="">DA :</label><input type="text" name="" id="txtDa" value='{{da}}'></div>
         <div>
             <label for="">Tax :</label>
-            <input type="range" name="" id="rangeTax" min="0" max="30" value="0">
-            <span id="spanTax">[Tax%]</span>
+            <input type="range" name="" id="rangeTax" min="0" max="30" value='{{tax}}' >
+            <span id="spanTax">{{tax}}%</span>
         </div>
         <div><input type="button" value="Calculate" id="btnCalculate"></div>
         <div>
-            <div id="divResult">[Salary]</div>
+            <div id="divResult">{{salary}}</div>
         </div>
     </script>
 
