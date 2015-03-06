@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Salary Calculator</title>
+	<script src="angular.js"></script>
+	<link rel="stylesheet" href="style.css">
+	<script>
+	String.prototype.toNumber = function(){
+		return parseInt(this,10);
+	}
+	var calculatorApp = angular.module("calculatorApp", ['ng']);
+	calculatorApp.run(function($rootScope){
+		$rootScope.calculator = {
+			basic : 0,
+			hra : 0,
+			da : 0,
+			tax : 0,
+			salary : 0,
+			calculate : function(){
+				var gross = this.basic.toNumber() + this.hra.toNumber() + this.da.toNumber();
+				this.salary = gross * ((100-this.tax.toNumber())/100);
+			}
+		}
+	})
+	
+	</script>
+</head>
+<body data-ng-app="calculatorApp">
+    <div id="calculator">
+        <h1>Salary Calculator</h1>
+        <hr>
+        <div><label for="">Basic :</label><input type="text" id="txtBasic" ng-model="calculator.basic"></div>
+        <div><label for="">HRA :</label><input type="text" id="txtHra" ng-model="calculator.hra"></div>
+        <div><label for="">DA :</label><input type="text" id="txtDa" ng-model="calculator.da"></div>
+        <div>
+            <label for="">Tax :</label>
+            <input type="range" id="rangeTax" min="0" max="30" ng-model="calculator.tax">
+            <span id="spanTax" >{{calculator.tax}}%</span>
+        </div>
+        <div><input type="button" value="Calculate" id="btnCalculate" ng-click="calculator.calculate()"></div>
+        <div>
+            <div id="divResult">{{calculator.salary | currency}}</div>
+        </div>     
+    </div>
+   </body></html>

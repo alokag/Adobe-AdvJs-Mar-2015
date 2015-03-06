@@ -1,0 +1,8 @@
+label{
+        display : block;
+    }
+        #divResult{
+            font-size: 28pt;
+            color : red;
+            font-weight: bold;
+        }
