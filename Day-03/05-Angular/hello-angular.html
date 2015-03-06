@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Angular Demo</title>
+	<script src="angular.js"></script>
+	<script>
+	var myApp = angular.module('myApp',['ng']);
+	myApp.run(function($rootScope){
+		$rootScope.name = "Suresh";
+		$rootScope.msg = "";
+		$rootScope.greet = function(){
+			$rootScope.msg = "Hi " +$rootScope.name + ", Have a nice weekdend!";
+		}
+	});
+	/*angular.element(document).ready(function(){
+		angular.bootstrap(document,['myApp'])
+	});*/
+	</script>
+</head>
+<body data-ng-app="myApp">
+	<input type="text" data-ng-model="name">
+	<input type="button" value="Greet" data-ng-click="greet()" >
+	<div data-ng-bind="msg"></div>
+</body>
+</html>
