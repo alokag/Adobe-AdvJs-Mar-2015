@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Salary Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="knockout-3.3.0.js"></script>
+    <script>
+    String.prototype.toNumber = function(){
+        return parseInt(this,10);
+    }
+    var salaryCalculator = {
+        basic : ko.observable(0),
+        hra : ko.observable(0),
+        da : ko.observable(0),
+        tax : ko.observable(0),
+        salary : ko.observable(0),
+        calculate : function(){
+            var gross = this.basic().toNumber() + this.hra().toNumber() + this.da().toNumber();
+            var net = gross * ((100-this.tax().toNumber())/100);
+            this.salary(net);
+        }
+    }
+    window.addEventListener("DOMContentLoaded", function(){
+        ko.applyBindings(salaryCalculator);
+    });
+    </script>
+    
+
+<tax>
+<body>
+    <div id="calculator">
+        <h1>Salary Calculator</h1>
+        <hr>
+        <div><label for="">Basic :</label><input type="text" id="txtBasic" data-bind="value : basic"></div>
+        <div><label for="">HRA :</label><input type="text" id="txtHra" data-bind="value : hra"></div>
+        <div><label for="">DA :</label><input type="text" id="txtDa" data-bind="value : da"></div>
+        <div>
+            <label for="">Tax :</label>
+            <input type="range" id="rangeTax" min="0" max="30" data-bind="value : tax">
+            <span id="spanTax" data-bind="text : tax"></span>
+        </div>
+        <div><input type="button" value="Calculate" id="btnCalculate" data-bind="click : calculate"></div>
+        <div>
+            <div id="divResult" data-bind="text : salary"></div>
+        </div>     
+    </div>
+   </body>
+</html>
