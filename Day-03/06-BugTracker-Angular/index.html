@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bug Tracker</title>
+    <style>
+    .closed {
+        font-style: italic;
+        text-decoration: line-through;
+        color : red;
+        font-weight: bold;
+    }
+    </style>
+    <script src="jquery-1.11.2.js"></script>
+    <script src="angular.js"></script>
+    <script>
+    var bugTrackerApp = angular.module('bugTrackerApp', ['ng']);
+    bugTrackerApp.controller("bugController", function($scope){
+        $scope.currentTime = new Date();
+        setInterval(function(){
+            $scope.$apply(function(){
+                var currentTime = new Date();
+                console.log("current time = ", currentTime)
+                $scope.currentTime = currentTime;    
+            })
+        },2000);
+        $scope.bugs = {
+            list : [],
+            add: function(bugTitle){
+                var newBug = {
+                    title : bugTitle,
+                    isClosed : false
+                };
+                this.list.push(newBug)
+            },
+            toggleClose : function(bug){
+                bug.isClosed = !bug.isClosed;
+            },
+            removeClosed : function(){
+                for(var i=this.list.length-1; i>=0; i--){
+                    if (this.list[i].isClosed)
+                        this.list.splice(i,1);
+                }
+            }
+        }
+    });
+    </script>
+</head>
+<body data-ng-app="bugTrackerApp" data-ng-controller="bugController">
+    <!--
+    Use Cases
+    1. Display a list of bugs
+    2. Add a bug
+    3. Toggle the close status of the bug
+    4. Remove closed bugs
+
+    -->
+    <h1>Bug Tracker</h1>
+    <hr>
+    <div>{{currentTime}}</div>
+    <label for="">Bug :</label>
+    <input type="text" data-ng-model="newBugTitle">
+    <input type="button" value="Add Bug" id="btnAdd" data-ng-click="bugs.add(newBugTitle)">
+    <input type="button" value="Remove Closed" id="btnRemoveClosed" data-ng-click="bugs.removeClosed()">
+    <ol id="olBugList">
+        <li data-ng-repeat="bug in bugs.list"
+            data-ng-click="bugs.toggleClose(bug)"
+            data-ng-class="{closed : bug.isClosed}"
+        >{{bug.title}}</li>
+    </ol>
+</body>
+</html>

@@ -10,8 +10,13 @@
 		return parseInt(this,10);
 	}
 	var calculatorApp = angular.module("calculatorApp", ['ng']);
+	
 	calculatorApp.run(function($rootScope){
-		$rootScope.calculator = {
+		$rootScope.dayOfWeek = "Friday";
+	});
+
+	calculatorApp.controller("calculatorController", function($scope){
+		$scope.calculator = {
 			basic : 0,
 			hra : 0,
 			da : 0,
@@ -23,11 +28,11 @@
 			}
 		}
 	})
-	
+
 	</script>
 </head>
 <body data-ng-app="calculatorApp">
-    <div id="calculator">
+    <div id="calculator" data-ng-controller="calculatorController">
         <h1>Salary Calculator</h1>
         <hr>
         <div><label for="">Basic :</label><input type="text" id="txtBasic" ng-model="calculator.basic"></div>
