@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Salary Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery.js"></script>
+    <script src="underscore.js"></script>
+    <script src="backbone.js"></script>
+    <script>
+    var SalaryCalculator = Backbone.Model.extend({
+        defaults : {
+            basic : 0,
+            hra : 0,
+            da : 0,
+            tax :0,
+            salary : 0
+        },
+        calculate : function(){
+            var gross = this.get('basic') + this.get('hra') + this.get('da');
+            var net = gross * ((100-this.get('tax'))/100)
+             this.set('salary', net);                                                       }
+    });
+
+    var SalaryCalculatorView = Backbone.View.extend({
+
+
+        initialize : function(){
+             _.bindAll(this, 'updateView');
+            this.model.on('change',this.updateView);
+
+        },
+        updateView : function(){
+            this.$("#txtBasic").val(this.model.get('basic'));
+            this.$("#txtHra").val(this.model.get('hra'));
+            this.$("#txtDa").val(this.model.get('da'));
+            this.$("#rangeTax").val(this.model.get('tax'));
+            this.$("#spanTax").html(this.model.get('tax') + '%');
+            this.$("#divResult").html(this.model.get('salary'));
+        },
+        events : {
+            'change input' : 'updateModel',
+            'click #btnCalculate' : 'triggerCalculate'
+        },
+        updateModel : function(){
+            this.model.set('basic', this.$("#txtBasic").val().toNumber());
+            this.model.set('hra', this.$("#txtHra").val().toNumber());
+            this.model.set('da', this.$("#txtDa").val().toNumber());
+            this.model.set('tax', this.$("#rangeTax").val().toNumber());
+        }
+    });
+
+
+    </script>
+
+</head>
+<body>
+   <div id="calculator">
+    <h1>Salary Calculator</h1>
+        <hr>
+        <div><label for="">Basic :</label><input type="text" name="" id="txtBasic"></div>
+        <div><label for="">HRA :</label><input type="text" name="" id="txtHra"></div>
+        <div><label for="">DA :</label><input type="text" name="" id="txtDa"></div>
+        <div>
+            <label for="">Tax :</label>
+            <input type="range" name="" id="rangeTax" min="0" max="30" value="0">
+            <span id="spanTax">[Tax%]</span>
+        </div>
+        <div><input type="button" value="Calculate" id="btnCalculate"></div>
+        <div>
+            <div id="divResult">[Salary]</div>
+        </div>
+   </div>
+
+</body>
+</html>
